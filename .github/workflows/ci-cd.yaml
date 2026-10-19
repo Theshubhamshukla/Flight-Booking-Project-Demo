@@ -44,13 +44,26 @@ jobs:
             --project=project-46c5290c-f673-44aa-941 \
             --format="value(name)"
 
+
       # Import Variables into Airflow-DEV
       - name: Import Variables into Airflow-DEV
+        shell: bash
         run: |
-          gcloud composer environments run airflow-dev \
-            --location=us-central1 \
-            --project=project-46c5290c-f673-44aa-941 \
-            variables import -- /home/airflow/gcs/data/dev/variables.json
+          jq -r 'to_entries[] | [
+            .key,
+            (if (.value | type) == "object" or (.value | type) == "array"
+             then (.value | tojson)
+             else (.value | tostring)
+             end)
+          ] | @tsv' variables/dev/variables.json |
+          while IFS=$'\t' read -r key value; do
+            echo "Setting Airflow variable: $key"
+            gcloud composer environments run airflow-dev \
+              --location=us-central1 \
+              --project=project-46c5290c-f673-44aa-941 \
+              variables set -- "$key" "$value" || exit 1
+          done
+
 
 
       # Sync Spark job to GCS
