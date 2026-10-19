@@ -48,8 +48,8 @@ jobs:
       - name: Import Variables into Airflow-DEV
         run: |
           gcloud composer environments run airflow-dev \
-            --location us-central1 \
-            --project project-46c5290c-f673-44aa-941 \
+            --location=us-central1 \
+            --project=project-46c5290c-f673-44aa-941 \
             variables import -- /home/airflow/gcs/data/dev/variables.json
 
 
