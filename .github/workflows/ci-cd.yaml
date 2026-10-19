@@ -34,12 +34,24 @@ jobs:
         run: |
           gsutil cp variables/dev/variables.json gs://us-central1-airflow-dev-a6365c26-bucket/dags/data/variables.json
 
+      # Debug GCP identity and project
+      - name: Debug GCP identity and project
+        run: |
+          gcloud auth list
+          gcloud config get-value project
+          gcloud composer environments describe airflow-dev \
+            --location=us-central1 \
+            --project=project-46c5290c-f673-44aa-941 \
+            --format="value(name)"
+
       # Import Variables into Airflow-DEV
       - name: Import Variables into Airflow-DEV
         run: |
           gcloud composer environments run airflow-dev \
             --location us-central1 \
+            --project project-46c5290c-f673-44aa-941 \
             variables import -- /home/airflow/gcs/data/dev/variables.json
+
 
       # Sync Spark job to GCS
       - name: Upload Spark Job to GCS
