@@ -32,7 +32,7 @@ jobs:
       # gsutil cp is for copy 
       - name: Upload Variables JSON to GCS
         run: |
-          gsutil cp variables/dev/variables.json gs://us-central1-airflow-dev-a6365c26-bucket/dags/data/variables.json
+          gsutil cp variables/dev/variables.json gs://us-central1-airflow-dev-2f363b3c-bucket/dags/data/variables.json
 
       # Debug GCP identity and project
       - name: Debug GCP identity and project
@@ -103,7 +103,7 @@ jobs:
       # Upload `variables.json` to Composer bucket
       - name: Upload Variables JSON to GCS
         run: |
-          gsutil cp variables/prod/variables.json gs://us-central1-airflow-prod-64ab34e8-bucket/data/prod/variables.json
+          gsutil cp variables/prod/variables.json gs://us-central1-airflow-prod-e5aba0c6-bucket/data/prod/variables.json
 
       # Import Variables into Airflow-PROD
       - name: Import Variables into Airflow-PROD
